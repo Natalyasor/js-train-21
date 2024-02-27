@@ -29,7 +29,7 @@
 
 class Musician {
   // статичне поле count, яке відслідковує кількість музикантів, початкове значення 0
-  count = 0;
+  static count = 0;
   // Об'являємо приватні поля #name; #instrument;
   #name;
   #instrument;
@@ -43,7 +43,7 @@ class Musician {
     // присвоєння вхідного значення name до приватного поля #name
     // присвоєння вхідного значення instrument до приватного поля #instrument
     // збільшення значення статичного поля на 1
-    count += 1;
+    Musician.count += 1;
   }
 
   get name() {
@@ -208,7 +208,11 @@ this.#band = band;
 }
 
 // Тут ми використовуємо Object.defineProperty(), щоб додати сетер band до класу Musician після його створення.
-Object.defineProperty(Musician.prototype, 'band');
+Object.defineProperty(Musician.prototype, 'band', {
+  set:function (newBand) {
+    this.band = newBand;
+  },
+});
 // Перший аргумент - це об'єкт, до якого ми хочемо додати властивість. У цьому випадку це Musician.prototype,
 // тому що ми хочемо додати сетер до всіх екземплярів класу Musician.
 // Другий аргумент - це ім'я властивості, яку ми хочемо додати. У цьому випадку це 'band'.
@@ -319,7 +323,7 @@ class Concert extends Performance {
   #ticketPrice;
   // Створюємо конструктор з чотирма вхідними параметрами: #band, #location, #date та #ticketPrice
   constructor (band, location, date, ticketPrice) {
-    super ();
+    super (band, location, date);
     this.#ticketPrice = ticketPrice;
   }
   // використання super для виклику конструктора базового класу
@@ -391,7 +395,7 @@ class SongWriter {
   #songs;
   // Створюємо конструктор з одним вхідним параметром: #songs
   constructor (songs) {
-    songs = this.#songs;
+    this.#songs = songs;
   }
   // Створюємо getter для #songs, що повертає приватну властивість #songs
   get songs () {
